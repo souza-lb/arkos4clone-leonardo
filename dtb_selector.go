@@ -46,7 +46,7 @@ var Consoles = []ConsoleConfig{
 		RealName: "r36pro",
 		BrandEntries: []BrandEntry{
 			{Brand: "XiFan HandHelds", DisplayName: "XiFan R36Pro"},
-			{Brand: "Clone R36s", DisplayName: "K36 Panel 1"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 1 With Amplifier"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
@@ -76,6 +76,7 @@ var Consoles = []ConsoleConfig{
 		RealName: "hg36",
 		BrandEntries: []BrandEntry{
 			{Brand: "Other", DisplayName: "GameConsole HG36"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 1 Without Amplifier"},
 		},
 		ExtraSources: []string{"logo/480p/", "kernel/common/"},
 	},
@@ -164,30 +165,30 @@ var Consoles = []ConsoleConfig{
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "k36p4",
+		RealName: "clone type2",
 		BrandEntries: []BrandEntry{
-			{Brand: "Clone R36s", DisplayName: "K36 Panel 4"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 2"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "k36p7",
+		RealName: "clone type3",
 		BrandEntries: []BrandEntry{
-			{Brand: "Clone R36s", DisplayName: "K36 Panel 7"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 3"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "clone typec",
+		RealName: "clone type4",
 		BrandEntries: []BrandEntry{
-			{Brand: "Clone R36s", DisplayName: "Clone TypeC"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 4"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "k36p8",
+		RealName: "clone type5",
 		BrandEntries: []BrandEntry{
-			{Brand: "Clone R36s", DisplayName: "K36 Panel 8"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 5"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},

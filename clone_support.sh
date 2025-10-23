@@ -2,6 +2,8 @@
 set -euo pipefail
 
 MOUNT_DIR="/home/lcdyk/arkos/mnt"
+UPDATE_DATE="07312025-1"
+MODDER="kk&lcdyk"
 
 # 统一的 rsync 选项：
 # -rltD   ：递归/保留软链/保留时间/保留设备文件（尽量通用）
@@ -15,7 +17,7 @@ sudo mkdir -p "$MOUNT_DIR/boot/consoles"
 sudo rsync $RSYNC_BOOT_OPTS --exclude='files' ./consoles/ "$MOUNT_DIR/boot/consoles/"
 
 # 这些都是普通文件，直接复制即可
-sudo cp -f ./sh/clone.sh ./dtb_selector_macos_intel ./dtb_selector_win32.exe ./dtb_selector_macos_apple ./sh/expandtoexfat.sh ./sh/fix_audio.sh "$MOUNT_DIR/boot/"
+sudo cp -f ./sh/clone.sh ./dtb_selector_macos_intel ./dtb_selector_win32.exe ./dtb_selector_macos_apple ./sh/expandtoexfat.sh "$MOUNT_DIR/boot/"
 
 echo "== 注入按键信息 =="
 sudo mkdir -p "$MOUNT_DIR/root/home/ark/.quirks"
@@ -38,8 +40,10 @@ echo "== 注入 915 驱动 =="
 sudo mkdir -p "$MOUNT_DIR/root/usr/lib/firmware" \
              "$MOUNT_DIR/root/usr/lib/modules/4.4.189/kernel/drivers/net/wireless"
 # 通配符不存在会让 cp 失败，加 || true 容错
+sudo cp -f ./bin/mt7610u_sta.ko "$MOUNT_DIR/root/usr/lib/modules/4.4.189/kernel/drivers/net/wireless/mediatek/" 2>/dev/null || true
 sudo cp -f ./bin/rk915_*.bin "$MOUNT_DIR/root/usr/lib/firmware/" 2>/dev/null || true
-sudo cp -f ./bin/rk915.ko "$MOUNT_DIR/root/usr/lib/modules/4.4.189/kernel/drivers/net/wireless/" 2>/dev/null || true
+sudo mkdir -p "$MOUNT_DIR/root/usr/lib/modules/4.4.189/kernel/drivers/net/wireless/rockchip_wlan/rk915"
+sudo cp -f ./bin/rk915.ko "$MOUNT_DIR/root/usr/lib/modules/4.4.189/kernel/drivers/net/wireless/rockchip_wlan/rk915/" 2>/dev/null || true
 sudo chmod 755 "$MOUNT_DIR/root/usr/lib/modules/4.4.189/kernel/drivers/net/wireless/rk915.ko" 2>/dev/null || true
 sudo chmod 755 "$MOUNT_DIR/root/usr/lib/firmware/"rk915_*.bin 2>/dev/null || true
 
@@ -85,21 +89,25 @@ sudo cp -f ./replace_file/emulationstation2.po "$MOUNT_DIR/root/usr/bin/emulatio
 sudo cp -f ./replace_file/es_input.cfg "$MOUNT_DIR/root/etc/emulationstation/"
 sudo chmod 777 "$MOUNT_DIR/root/etc/emulationstation/es_input.cfg" 2>/dev/null || true
 
-echo "== 复制 roms.tar 出来操作 =="
-sudo cp "$MOUNT_DIR/root/roms.tar" /home/lcdyk/arkos/
-mkdir -p /home/lcdyk/arkos/tmproms
-tar -xf /home/lcdyk/arkos/roms.tar -C /home/lcdyk/arkos/tmproms
-mkdir -p /home/lcdyk/arkos/tmproms/roms/hbmame
-tar -xf zulu11.48.21-ca-jdk11.0.11-linux_aarch64.tar.gz -C /home/lcdyk/arkos/tmproms/roms/j2me
-mv /home/lcdyk/arkos/tmproms/roms/j2me/zulu11.48.21-ca-jdk11.0.11-linux_aarch64 /home/lcdyk/arkos/tmproms/roms/j2me/jdk
-echo "== 注入 portmaster =="
-sudo cp -rf ./PortMaster/* "/home/lcdyk/arkos/tmproms/roms/tools/PortMaster/"
-sudo cp -rf ./PortMaster/PortMaster.sh "/home/lcdyk/arkos/tmproms/roms/tools/PortMaster.sh"
-sudo tar -cf /home/lcdyk/arkos/roms.tar -C /home/lcdyk/arkos/tmproms .
-rm -rf /home/lcdyk/arkos/tmproms
-sudo cp /home/lcdyk/arkos/roms.tar "$MOUNT_DIR/root/"
-sudo chmod -R 755 $MOUNT_DIR/root/roms.tar
-sudo rm -rf /home/lcdyk/arkos/roms.tar
+if [ "$(stat -c%s $MOUNT_DIR/root/roms.tar 2>/dev/null || echo 0)" -le $((100*1024*1024)) ]; then
+  echo "== 复制 roms.tar 出来操作 =="
+  sudo cp "$MOUNT_DIR/root/roms.tar" /home/lcdyk/arkos/
+  mkdir -p /home/lcdyk/arkos/tmproms
+  tar -xf /home/lcdyk/arkos/roms.tar -C /home/lcdyk/arkos/tmproms
+  mkdir -p /home/lcdyk/arkos/tmproms/roms/hbmame
+  tar -xf zulu11.48.21-ca-jdk11.0.11-linux_aarch64.tar.gz -C /home/lcdyk/arkos/tmproms/roms/j2me
+  mv /home/lcdyk/arkos/tmproms/roms/j2me/zulu11.48.21-ca-jdk11.0.11-linux_aarch64 /home/lcdyk/arkos/tmproms/roms/j2me/jdk
+  echo "== 注入 portmaster =="
+  sudo cp -rf ./PortMaster/* "/home/lcdyk/arkos/tmproms/roms/tools/PortMaster/"
+  sudo cp -rf ./PortMaster/PortMaster.sh "/home/lcdyk/arkos/tmproms/roms/tools/PortMaster.sh"
+  sudo tar -cf /home/lcdyk/arkos/roms.tar -C /home/lcdyk/arkos/tmproms .
+  sudo rm -rf /home/lcdyk/arkos/tmproms
+  sudo cp /home/lcdyk/arkos/roms.tar "$MOUNT_DIR/root/"
+  sudo chmod -R 755 $MOUNT_DIR/root/roms.tar
+  sudo rm -rf /home/lcdyk/arkos/roms.tar
+else
+  echo "== 跳过 roms.tar 操作 =="
+fi
 
 echo "== ogage快捷键复制 =="
 sudo cp -r ./replace_file/ogage "$MOUNT_DIR/root/usr/local/bin/"
@@ -108,15 +116,20 @@ sudo cp -r ./replace_file/ogage "$MOUNT_DIR/root/home/ark/.quirks/"
 echo "== 删除不需要的文件 =="
 sudo rm -rf "$MOUNT_DIR/boot/BMPs"
 sudo rm -rf "$MOUNT_DIR/boot/ScreenFiles"
-sudo rm -rf "$MOUNT_DIR/boot/boot.ini" $MOUNT_DIR/boot/*.dtb $MOUNT_DIR/boot/*.orig $MOUNT_DIR/boot/*.tony
-if ! grep -q "(kk&lcdyk)" "$MOUNT_DIR/root/usr/share/plymouth/themes/text.plymouth"; then
-    sed -i -E 's/^(title=.*\([^()]*\)\([^()]*\)\()[^()]*(\))$/\1kk\&lcdyk\2/' "$MOUNT_DIR/root/usr/share/plymouth/themes/text.plymouth"
-fi
+sudo rm -rf "$MOUNT_DIR/boot/boot.ini" $MOUNT_DIR/boot/*.dtb $MOUNT_DIR/boot/*.orig $MOUNT_DIR/boot/*.tony $MOUNT_DIR/boot/Image $MOUNT_DIR/boot/*.bmp $MOUNT_DIR/boot/WHERE_ARE_MY_ROMS.txt
+sudo sed -i "/title\=/c\title\=ArkOS 2.0 ($UPDATE_DATE)($MODDER)" "$MOUNT_DIR/root/usr/share/plymouth/themes/text.plymouth"
 cat $MOUNT_DIR/root/usr/share/plymouth/themes/text.plymouth
 sudo rm -rf "$MOUNT_DIR/root/opt/system/DeviceType"
 sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Video Boot/"
 sudo rm -rf "$MOUNT_DIR/root/opt/system/Set Launchimage to ascii or pic.sh"
 sudo rm -rf "$MOUNT_DIR/root/opt/system/Set Launchimage to vid.sh"
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Change LED to Red.sh"
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Change Ports SDL.sh"
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced"/Restore*.sh
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Screen - Switch to Original Screen Timings.sh"
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Reset EmulationStation Controls.sh"
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Fix Global Hotkeys.sh"
 
+sudo touch $MOUNT_DIR/boot/"USE_DTB_SELECT_TO_SELECT_DEVICE"
 
 echo "== 完成 =="

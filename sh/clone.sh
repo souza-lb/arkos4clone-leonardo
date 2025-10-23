@@ -15,86 +15,69 @@ fi
 declare -A dtb2label=(
   [rk3326-mymini-linux.dtb]=mymini
   [rk3326-xf35h-linux.dtb]=xf35h
-  [rk3326-xf36pro-linux.dtb]=r36pro
-  [rk3326-k36s-linux.dtb]=k36s
-  [rk3326-hg36-linux.dtb]=hg36
-  [rk3326-rx6h-linux.dtb]=rx6h
+  [rk3326-r36pro-linux.dtb]=r36pro
   [rk3326-r36max-linux.dtb]=r36max
   [rk3326-xf40h-linux.dtb]=xf40h
   [rk3326-xf40v-linux.dtb]=xf40v
-  [rk3326-r36ultra-linux.dtb]=r36ultra
-  [rk3326-k36p8-linux.dtb]=k36panel8
-  [rk3326-r46h-linux.dtb]=r46h
   [rk3326-r36plus-linux.dtb]=r36splus
-  [rk3326-k36p4-linux.dtb]=k36panel4
-  [rk3326-r36s-typec-linux.dtb]=typec
-  [rk3326-k36p7-linux.dtb]=k36panel7
-  [rk3326-a10mini-linux.dtb]=a10mini
+  [rk3326-r46h-linux.dtb]=r46h
+  [rk3326-hg36-linux.dtb]=hg36
+  [rk3326-rx6h-linux.dtb]=rx6h
+  [rk3326-k36s-linux.dtb]=k36s
+  [rk3326-r36ultra-linux.dtb]=r36ultra
   [rk3326-xgb36-linux.dtb]=xgb36
+  [rk3326-a10mini-linux.dtb]=a10mini
 )
 declare -A console_profile=(
-  [r36s]=480p
   [mymini]=480p
   [xf35h]=480p
   [r36pro]=480p
-  [k36s]=480p
-  [hg36]=480p
-  [rx6h]=480p
-  [typec]=480p
   [r36max]=720p
   [xf40h]=720p
   [xf40v]=720p
-  [r36ultra]=720p
-  [k36panel8]=480p
-  [r46h]=768p
   [r36splus]=720p
-  [k36panel4]=480p
-  [k36panel7]=480p
-  [a10mini]=480p
+  [r46h]=768p
+  [hg36]=480p
+  [rx6h]=480p
+  [k36s]=480p
+  [r36ultra]=720p
   [xgb36]=480p
+  [a10mini]=480p
+  [r36s]=480p
 )
 declare -A joy_conf_map=(
-  [r36s]=dual
   [mymini]=single
   [xf35h]=dual
   [r36pro]=dual
-  [k36s]=single
-  [hg36]=dual
-  [rx6h]=dual
   [r36max]=dual
   [xf40h]=dual
   [xf40v]=dual
-  [r36ultra]=dual
-  [k36panel8]=dual
-  [r46h]=dual
   [r36splus]=dual
-  [k36panel4]=dual
-  [k36panel7]=dual
-  [typec]=dual
-  [a10mini]=none
+  [r46h]=dual
+  [hg36]=dual
+  [rx6h]=dual
+  [k36s]=single
+  [r36ultra]=dual
   [xgb36]=single
+  [a10mini]=none
+  [r36s]=dual
 )
 declare -A ogage_conf_map=(
-  [r36s]=happy5
   [mymini]=select
   [xf35h]=select
   [r36pro]=happy5
-  [k36s]=happy5
-  [hg36]=happy5
-  [rx6h]=select
   [r36max]=happy5
   [xf40h]=select
   [xf40v]=happy5
-  [r36ultra]=happy5
-  [k36panel8]=happy5
-  [r46h]=select
   [r36splus]=happy5
-  [k36panel4]=happy5
-  [k36panel7]=happy5
-  [typec]=happy5
-  [a10mini]=happy5
+  [r46h]=select
+  [hg36]=happy5
+  [rx6h]=select
+  [k36s]=happy5
+  [r36ultra]=happy5
   [xgb36]=happy5
-  # 按需增删：  [机型]=select|mode
+  [a10mini]=happy5
+  [r36s]=happy5
 )
 rk915_set=("xf40h" "xf40v" "xf35h" "r36ultra" "k36s")   # 按需增删
 LABEL="${dtb2label[$DTB]:-r36s}"   # 默认 r36s
@@ -204,7 +187,7 @@ adjust_per_joy_conf() {
 }
 
 
-# 依据 LABEL 执行“拷贝并运行 fix_pad”
+# 依据 LABEL 执行
 apply_quirks_for() {
   local dtbval="$1"
   local base="$QUIRKS_DIR/$dtbval"
@@ -235,15 +218,6 @@ copy_file() {
 
 # =============== 执行开始 ===============
 msg "DTB filename: ${DTB:-<empty>}, LABEL: $LABEL"
-
-# 检测 /boot/fix_audio.sh 是否存在
-if [ -f "/boot/fix_audio.sh" ]; then
-  mkdir -p /opt/system/Clone
-  cp -f "/boot/fix_audio.sh" "/opt/system/Clone/Toggle Audio.sh"
-  "/boot/fix_audio.sh"
-  rm -rf "/boot/fix_audio.sh"
-  echo "[boot] Copied fix_audio.sh -> /opt/system/Clone/Toggle Audio.sh"
-fi
 
 # 按规则处理 /boot/.console
 if [[ ! -f "$CONSOLE_FILE" ]]; then
@@ -279,16 +253,30 @@ else
     )  > /dev/tty1 2>&1
   fi
 fi
+
+# 加载驱动
+sudo depmod -a || true
 # 安装915wifi驱动
 if [[ -f "$CONSOLE_FILE" ]]; then
   cur_console="$(tr -d '\r\n' < "$CONSOLE_FILE")"
   for x in "${rk915_set[@]}"; do
     if [[ "$cur_console" == "$x" ]]; then
       msg "insmod rk915.ko: $cur_console"
-      sudo insmod -f /usr/lib/modules/4.4.189/kernel/drivers/net/wireless/rk915.ko || true
+      sudo modprobe -v rk915 || true
       break
     fi
   done
+fi
+
+sudo modprobe -v mt7610u_sta || true
+# 开机将音频设置为SPK如果是OFF的话
+STATE=$(amixer get 'Playback Path' | grep -oP "Item0: '\K\w+")
+if [ "$STATE" = "OFF" ]; then
+    echo "Playback Path is OFF, switching to SPK..."
+    amixer set 'Playback Path' 'SPK' || true
+    sudo alsactl store || true
+else
+    echo "Playback Path is already set to $STATE, no change."
 fi
 
 if [[ -f "/boot/.cn" ]]; then
@@ -314,6 +302,7 @@ if [[ -f "/boot/.cn" ]]; then
   sed -i -e '/menu_driver \= \"/c\menu_driver \= \"ozone\"' /home/ark/.config/retroarch/retroarch.cfg || true
   sed -i -e '/menu_driver \= \"/c\menu_driver \= \"ozone\"' /home/ark/.config/retroarch32/retroarch.cfg.bak || true
   sed -i -e '/menu_driver \= \"/c\menu_driver \= \"ozone\"' /home/ark/.config/retroarch/retroarch.cfg.bak || true
+  sudo rm /boot/.cn
 fi
 
 msg "Done."
