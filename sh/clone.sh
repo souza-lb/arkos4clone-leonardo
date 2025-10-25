@@ -18,7 +18,8 @@ declare -A dtb2label=(
   [rk3326-r36pro-linux.dtb]=r36pro
   [rk3326-r36max-linux.dtb]=r36max
   [rk3326-xf40h-linux.dtb]=xf40h
-  [rk3326-xf40v-linux.dtb]=xf40v
+  [rk3326-dc40v-linux.dtb]=dc40v
+  [rk3326-dc35v-linux.dtb]=dc35v
   [rk3326-r36plus-linux.dtb]=r36splus
   [rk3326-r46h-linux.dtb]=r46h
   [rk3326-hg36-linux.dtb]=hg36
@@ -34,7 +35,8 @@ declare -A console_profile=(
   [r36pro]=480p
   [r36max]=720p
   [xf40h]=720p
-  [xf40v]=720p
+  [dc40v]=720p
+  [dc35v]=720p
   [r36splus]=720p
   [r46h]=768p
   [hg36]=480p
@@ -51,7 +53,8 @@ declare -A joy_conf_map=(
   [r36pro]=dual
   [r36max]=dual
   [xf40h]=dual
-  [xf40v]=dual
+  [dc40v]=dual
+  [dc35v]=dual
   [r36splus]=dual
   [r46h]=dual
   [hg36]=dual
@@ -68,7 +71,8 @@ declare -A ogage_conf_map=(
   [r36pro]=happy5
   [r36max]=happy5
   [xf40h]=select
-  [xf40v]=happy5
+  [dc40v]=happy5
+  [dc35v]=happy5
   [r36splus]=happy5
   [r46h]=select
   [hg36]=happy5
@@ -79,7 +83,8 @@ declare -A ogage_conf_map=(
   [a10mini]=happy5
   [r36s]=happy5
 )
-rk915_set=("xf40h" "xf40v" "xf35h" "r36ultra" "k36s")   # 按需增删
+rk915_set=("xf40h" "dc40v" "xf35h" "dc35v" "r36ultra" "k36s")   # 按需增删
+spi_set=("dc35v" "dc40v")   # 按需增删
 LABEL="${dtb2label[$DTB]:-r36s}"   # 默认 r36s
 # =============== 路径配置（可按需调整）===============
 QUIRKS_DIR="/home/ark/.quirks"                  # 目标机型库
@@ -263,6 +268,18 @@ if [[ -f "$CONSOLE_FILE" ]]; then
     if [[ "$cur_console" == "$x" ]]; then
       msg "insmod rk915.ko: $cur_console"
       sudo modprobe -v rk915 || true
+      break
+    fi
+  done
+fi
+
+# ws2812摇杆灯控制加载spi模块
+if [[ -f "$CONSOLE_FILE" ]]; then
+  cur_console="$(tr -d '\r\n' < "$CONSOLE_FILE")"
+  for x in "${spi_set[@]}"; do
+    if [[ "$cur_console" == "$x" ]]; then
+      msg "sudo modprobe spidev : $cur_console"
+      sudo modprobe spidev || true
       break
     fi
   done

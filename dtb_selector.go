@@ -65,6 +65,21 @@ var Consoles = []ConsoleConfig{
 		ExtraSources: []string{"logo/720P/", "kernel/common/"},
 	},
 	{
+		RealName: "dc40v",
+		BrandEntries: []BrandEntry{
+			{Brand: "XiFan HandHelds", DisplayName: "XiFan XF40V"},
+			{Brand: "XiFan HandHelds", DisplayName: "XiFan DC40V"},
+		},
+		ExtraSources: []string{"logo/720P/", "kernel/common/"},
+	},
+	{
+		RealName: "dc35v",
+		BrandEntries: []BrandEntry{
+			{Brand: "XiFan HandHelds", DisplayName: "XiFan DC35V"},
+		},
+		ExtraSources: []string{"logo/480P/", "kernel/common/"},
+	},
+	{
 		RealName: "k36s",
 		BrandEntries: []BrandEntry{
 			{Brand: "Other", DisplayName: "GameConsole K36S"},

@@ -5,7 +5,7 @@
 # Backends:
 #   - mcu_led : (xf35h / xf40h) GPIO65 + UART(/dev/ttyS2) + mcu_led chgmode
 #   - mymini  : (mymini)        Linux LED class (/sys/class/leds/*/brightness)
-#   - ws2812  : (xf40v / xf35v) 外部 ws2812ctl 包装器（可自带 glibc 启动）
+#   - ws2812  : (dc40v / dc35v) 外部 ws2812 包装器
 #
 # 约定：
 #   * 首次进入不改变 LED 状态
@@ -19,7 +19,7 @@
 # 配置区（便于集中修改）
 # ======================
 MCU_LED_BIN="${MCU_LED_BIN:-/usr/bin/mcu_led}"            # 或 /usr/local/bin/mcu_led
-WS2812CTL_BIN="${WS2812CTL_BIN:-/usr/bin/ws2812ctl}"      # ws2812 启动包装器
+WS2812CTL_BIN="${WS2812CTL_BIN:-/usr/bin/ws2812}"      # ws2812 启动包装器
 GPTOKEYB_BIN="${GPTOKEYB_BIN:-/opt/inttools/gptokeyb}"
 SDL_DB_PATH="${SDL_DB_PATH:-/opt/inttools/gamecontrollerdb.txt}"
 KEYS_GPTK_PATH="${KEYS_GPTK_PATH:-/opt/inttools/keys.gptk}"
@@ -54,7 +54,7 @@ detect_backend() {
   case "${MODEL}" in
     xf35h|xf40h|k36s)          echo "mcu_led" ;;
     mymini|r36ultra|xgb36)      echo "gpio"  ;;
-    xf40v|xf35v)          echo "ws2812"  ;;
+    dc40v|dc35v)          echo "ws2812"  ;;
     *)                    echo "unsupported" ;;
   esac
 }
@@ -108,7 +108,6 @@ build_menu_items() {
     mcu_led)
       cat <<'EOF'
 off Turn off LED
-battery Battery service control
 red Solid Red
 green Solid Green
 blue Solid Blue
@@ -130,7 +129,6 @@ EOF
     gpio)
       cat <<'EOF'
 off Turn off LED
-battery Battery service control
 red Solid Red
 green Solid Green
 blue Solid Blue
@@ -148,16 +146,16 @@ breathing General breathing
 breathing_red Breathing Red
 breathing_green Breathing Green
 breathing_blue Breathing Blue
-breathing_blue_red Breathing Blue+Red
-breathing_green_blue Breathing Green+Blue
-breathing_red_green Breathing Red+Green
+breathing_blue_red Breathing Magenta
+breathing_green_blue Breathing Cyan
+breathing_red_green Breathing Yellow
 breathing_red_green_blue Breathing RGB
-red_green_blue Solid RGB (white-ish)
+red_green_blue Solid White
 blue_red Solid Magenta
 blue Solid Blue
 green_blue Solid Cyan
 green Solid Green
-red_green Solid Yellow/Orange-ish
+red_green Solid Yellow
 red Solid Red
 EOF
       ;;
@@ -247,9 +245,6 @@ apply_choice_mcu() {
   if run_mcu_led "$code"; then
     set_kv led.color "$name"
     mkdir -p "$STATE_DIR"; echo "$name" | sudo tee "$STATE_FILE" >/dev/null || true
-    if [[ "$name" == "battery" ]] && have_cmd systemctl; then
-      sudo systemctl restart batteryledstatus.service || true
-    fi
   else
     dialog --msgbox "Failed to apply: $name (code $code)" 6 48 > "$CURR_TTY"
     return 1
@@ -294,7 +289,7 @@ apply_choice_mymini() {
 
   case "$name" in
     off)           led_off_all ;;
-    battery|green) led_set_BGR 0       "$G_ON" 0       ;;
+    green)         led_set_BGR 0       "$G_ON" 0       ;;
     blue)          led_set_BGR "$B_ON" 0       0       ;;
     red)           led_set_BGR 0       0       "$R_ON" ;;
     white)         led_set_BGR "$B_ON" "$G_ON" "$R_ON" ;;
@@ -306,9 +301,6 @@ apply_choice_mymini() {
   set_kv led.color "$name"
   mkdir -p "$STATE_DIR"; echo "$name" | sudo tee "$STATE_FILE" >/dev/null || true
 
-  if [[ "$name" == "battery" ]] && have_cmd systemctl; then
-    sudo systemctl restart batteryledstatus.service || true
-  fi
   return 0
 }
 
@@ -346,34 +338,43 @@ kill_ws2812ctl_if_running() {
   pkill -f "^${WS2812CTL_BIN} " >/dev/null 2>&1 || true
 }
 
-# 杀掉已在运行的 ws2812ctl（若有）
-kill_ws2812ctl_if_running() {
-  # 根据二进制路径精确匹配
-  pkill -f "^${WS2812CTL_BIN} " >/dev/null 2>&1 || true
-}
-
 # 以非阻塞方式启动 ws2812ctl；若有 coreutils 的 timeout 就用它
+# start_ws2812ctl_async() {
+#   local arg="$1"
+
+#   # 先清旧
+#   kill_ws2812ctl_if_running
+
+#   if command -v timeout >/dev/null 2>&1; then
+#     # 给个极短的启动窗口，避免阻塞当前脚本
+#     # 有些实现会在收到参数后自行常驻，这里用 timeout 让前台立刻返回
+#     timeout 0.3s "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 || true
+#     # 若还需要后台守护（部分实现会在 timeout 后退出），再补一手纯后台
+#     nohup "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 </dev/null &
+#   else
+#     # 直接后台 + 脱离终端
+#     nohup "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 </dev/null &
+#   fi
+
+#   # 简单确认：给系统调度一点时间
+#   sleep 0.05
+#   # 可选：检查是否有新进程在跑（不强制失败）
+#   pgrep -f "^${WS2812CTL_BIN} " >/dev/null 2>&1 || true
+# }
+
 start_ws2812ctl_async() {
   local arg="$1"
-
-  # 先清旧
   kill_ws2812ctl_if_running
 
-  if command -v timeout >/dev/null 2>&1; then
-    # 给个极短的启动窗口，避免阻塞当前脚本
-    # 有些实现会在收到参数后自行常驻，这里用 timeout 让前台立刻返回
-    timeout 0.3s "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 || true
-    # 若还需要后台守护（部分实现会在 timeout 后退出），再补一手纯后台
-    nohup "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 </dev/null &
-  else
-    # 直接后台 + 脱离终端
-    nohup "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 </dev/null &
+  # 仅尝试一种启动方式，然后检测是否常驻；不常驻才补一次
+  nohup "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 </dev/null &
+  sleep 0.1
+  if ! pgrep -f "^${WS2812CTL_BIN} ${arg//\//\\/}(\s|$)" >/dev/null 2>&1; then
+    # 某些实现会瞬退，再补一次（可用 timeout 防卡死）
+    command -v timeout >/dev/null 2>&1 && timeout 0.3s "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 || \
+      nohup "$WS2812CTL_BIN" "$arg" >/dev/null 2>&1 </dev/null &
+    sleep 0.05
   fi
-
-  # 简单确认：给系统调度一点时间
-  sleep 0.05
-  # 可选：检查是否有新进程在跑（不强制失败）
-  pgrep -f "^${WS2812CTL_BIN} " >/dev/null 2>&1 || true
 }
 
 
