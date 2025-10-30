@@ -5,19 +5,41 @@ Currently, I can only maintain the devices I personally own, but contributions a
 
 ## Supported Devices
 
-- **XF40H** 
-- **XF35H**
-- **MyMini**
-- **R36Pro** 
-- **R36Max**
-- **HG36**
-- **R36Ultra**[``V2 joyLed uncontrollable``]
-- **R36T**
-- **K36S**
-- **R36T Max**
-- **RX6H**
-- **A10Mini**
-- **R36S Clone [type1-5]** 
+- **XiFan HandHeld**
+  - **XF40H** 
+  - **XF35H**
+  - **MyMini**
+  - **R36Pro** 
+  - **R36Max**
+  - **XF40V**
+  - **DC40V**
+  - **DC35V**
+  
+- **YMC**
+
+  - **A10Mini**
+
+- **Kinhank**
+
+  - **K36**
+
+- **Other**
+
+  - **K36S**
+  - **R36T**
+  - **R36T Max**
+  - **HG36**
+  - **R36Ultra**[``V2 joyLed uncontrollable``]
+  - **RX6H**
+  - **XGB36**
+
+- **Clone R36S**
+
+  - **R36S Clone [Type1-5]** 
+
+****
+
+  
 
 **💡 If you don't know what clone your device is but you have the DTB file, you can use [ DTB Analysis Tool Web](https://lcdyk0517.github.io/dtbTools.html) to help identify your clone type.**
 

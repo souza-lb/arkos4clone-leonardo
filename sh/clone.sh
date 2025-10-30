@@ -263,6 +263,9 @@ else
       apply_quirks_for "$LABEL"
       sleep 5
     )  > /dev/tty1 2>&1
+    systemctl status systemd-journald.service systemd-journald.socket|| true
+    sudo systemctl unmask systemd-journald.service systemd-journald.socket|| true
+    sudo systemctl enable --now systemd-journald.service systemd-journald.socket|| true
   fi
 fi
 
