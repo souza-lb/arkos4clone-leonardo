@@ -69,6 +69,22 @@
 		<name>进入PM</name>
 	</game>
 	<game>
+		<path>./Tools/ArkManager.sh</path>
+		<name>Arkos工具合集</name>
+	</game>
+	<game>
+		<path>./Tools/Ghost Loader.sh</path>
+		<name>主题配置</name>
+	</game>
+	<game>
+		<path>./Tools/Session Recall.sh</path>
+		<name>存档管理</name>
+	</game>
+	<game>
+		<path>./Tools/System Info.sh</path>
+		<name>系统信息</name>
+	</game>
+	<game>
 		<path>./Clone/Toggle Audio.sh</path>
 		<name>声音调整</name>
 	</game>

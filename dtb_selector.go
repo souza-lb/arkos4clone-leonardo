@@ -82,15 +82,15 @@ var Consoles = []ConsoleConfig{
 	{
 		RealName: "k36s",
 		BrandEntries: []BrandEntry{
-			{Brand: "Other", DisplayName: "GameConsole K36S"},
-			{Brand: "Other", DisplayName: "GameConsole R36T"},
+			{Brand: "AISLPC", DisplayName: "GameConsole K36S"},
+			{Brand: "AISLPC", DisplayName: "GameConsole R36T"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
 		RealName: "r36tmax",
 		BrandEntries: []BrandEntry{
-			{Brand: "Other", DisplayName: "GameConsole R36T MAX"},
+			{Brand: "AISLPC", DisplayName: "GameConsole R36T MAX"},
 		},
 		ExtraSources: []string{"logo/720P/", "kernel/common/"},
 	},
@@ -124,6 +124,13 @@ var Consoles = []ConsoleConfig{
 		ExtraSources: []string{"logo/768p/", "kernel/common/"},
 	},
 	{
+		RealName: "r40xx",
+		BrandEntries: []BrandEntry{
+			{Brand: "GameConsole", DisplayName: "GameConsole R40xx"},
+		},
+		ExtraSources: []string{"logo/768p/", "kernel/common/"},
+	},
+	{
 		RealName: "r36splus",
 		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36sPlus"},
@@ -131,61 +138,73 @@ var Consoles = []ConsoleConfig{
 		ExtraSources: []string{"logo/720p/", "kernel/common/"},
 	},
 	{
-		RealName: "origin r36s panel 0",
+		RealName: "origin panel0",
 		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36s Panel 0"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "origin r36s panel 1",
+		RealName: "origin panel1",
 		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36s Panel 1"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "origin r36s panel 2",
+		RealName: "origin panel2",
 		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36s Panel 2"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "origin r36s panel 3",
+		RealName: "origin panel3",
 		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36s Panel 3"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "origin r36s panel 4",
+		RealName: "origin panel4",
 		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36s Panel 4"},
+		},
+		ExtraSources: []string{"logo/480P/", "kernel/common/"},
+	},
+	{
+		RealName: "v22 panel4",
+		BrandEntries: []BrandEntry{
+			{Brand: "GameConsole", DisplayName: "GameConsole R36s Panel 4 V22"},
+		},
+		ExtraSources: []string{"logo/480P/", "kernel/common/"},
+	},
+	{
+		RealName: "origin panel4",
+		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36XX"},
+		},
+		ExtraSources: []string{"logo/480P/", "kernel/common/"},
+	},
+	{
+		RealName: "r36h",
+		BrandEntries: []BrandEntry{
 			{Brand: "GameConsole", DisplayName: "GameConsole R36H"},
 			{Brand: "GameConsole", DisplayName: "GameConsole O30S"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "soy sauce r36s panel 5",
+		RealName: "sauce v03",
 		BrandEntries: []BrandEntry{
-			{Brand: "SaySouce R36s", DisplayName: "Panel 5"},
+			{Brand: "SaySouce R36s", DisplayName: "Soy Sauce V03 (ArkOS4Clone kernel)"},
 		},
-		ExtraSources: []string{"logo/480P/", "kernel/soySauce/"},
+		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
 	{
-		RealName: "soy sauce r36s panel 6",
+		RealName: "sauce v04",
 		BrandEntries: []BrandEntry{
-			{Brand: "SaySouce R36s", DisplayName: "Panel 6"},
-		},
-		ExtraSources: []string{"logo/480P/", "kernel/soySauce/"},
-	},
-	{
-		RealName: "soy sauce v04",
-		BrandEntries: []BrandEntry{
-			{Brand: "SaySouce R36s", DisplayName: "Soy Sauce V04 (ArkOS4Clone kernel) (adjust 60Hz)"},
+			{Brand: "SaySouce R36s", DisplayName: "Soy Sauce V04 (ArkOS4Clone kernel)"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
@@ -207,7 +226,14 @@ var Consoles = []ConsoleConfig{
 	{
 		RealName: "clone type2",
 		BrandEntries: []BrandEntry{
-			{Brand: "Clone R36s", DisplayName: "Clone Type 2"},
+			{Brand: "Clone R36s", DisplayName: "Clone Type 2 Without Amplifier"},
+		},
+		ExtraSources: []string{"logo/480P/", "kernel/common/"},
+	},
+	{
+		RealName: "clone type2 amp",
+		BrandEntries: []BrandEntry{
+			{Brand: "Clone R36s", DisplayName: "Clone Type 2 With Amplifier"},
 		},
 		ExtraSources: []string{"logo/480P/", "kernel/common/"},
 	},
@@ -244,18 +270,19 @@ var Consoles = []ConsoleConfig{
 		BrandEntries: []BrandEntry{
 			{Brand: "Other", DisplayName: "GameConsole T16MAX"},
 		},
-		ExtraSources: []string{"logo/480P/", "kernel/common/"},
+		ExtraSources: []string{"logo/720P/", "kernel/common/"},
 	},
 }
 
 // 品牌列表
 var Brands = []string{
-	"XiFan HandHelds",
-	"GameConsole",
 	"YMC",
+	"AISLPC",
 	"Kinhank",
 	"Clone R36s",
+	"GameConsole",
 	"SaySouce R36s",
+	"XiFan HandHelds",
 	"Other",
 }
 

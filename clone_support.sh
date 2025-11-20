@@ -2,7 +2,7 @@
 set -euo pipefail
 
 MOUNT_DIR="/home/lcdyk/arkos/mnt"
-UPDATE_DATE="07312025-1"
+UPDATE_DATE="11072025"
 MODDER="kk&lcdyk"
 
 # 统一的 rsync 选项：
@@ -86,14 +86,16 @@ sudo cp -f ./replace_file/es_systems.cfg "$MOUNT_DIR/root/etc/emulationstation/"
 sudo chmod 777 "$MOUNT_DIR/root/etc/emulationstation/es_systems.cfg" 2>/dev/null || true
 sudo cp -f ./replace_file/emulationstation2.po "$MOUNT_DIR/root/usr/bin/emulationstation/resources/locale/zh-CN/"
 
-sudo cp -f ./replace_file/es_input.cfg "$MOUNT_DIR/root/etc/emulationstation/"
-sudo chmod 777 "$MOUNT_DIR/root/etc/emulationstation/es_input.cfg" 2>/dev/null || true
+sudo rm -rf 777 "$MOUNT_DIR/root/etc/emulationstation/es_input.cfg" 2>/dev/null || true
 
 echo "== 调整drastic =="
-sudo rm -rf "$MOUNT_DIR/root/opt/drastic/*"
-sudo cp -f ./replace_file/drastic/* "$MOUNT_DIR/root/opt/drastic"
-sudo chown -R 1002:1002 "$MOUNT_DIR/root/opt/drastic/*
-sudo chmod 777 "$MOUNT_DIR/root/opt/drastic/* 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/drastic" 2>/dev/null || true
+sudo mkdir -p "$MOUNT_DIR/root/opt/drastic" 2>/dev/null || true
+
+sudo cp -a ./replace_file/drastic/. "$MOUNT_DIR/root/opt/drastic/" 2>/dev/null || true
+
+sudo chown -R 1002:1002 "$MOUNT_DIR/root/opt/drastic" 2>/dev/null || true
+sudo chmod -R 775 "$MOUNT_DIR/root/opt/drastic" 2>/dev/null || true
 
 if [ "$(stat -c%s $MOUNT_DIR/root/roms.tar 2>/dev/null || echo 0)" -le $((100*1024*1024)) ]; then
   echo "== 复制 roms.tar 出来操作 =="
@@ -120,23 +122,36 @@ echo "== ogage快捷键复制 =="
 sudo cp -r ./replace_file/ogage "$MOUNT_DIR/root/usr/local/bin/"
 sudo cp -r ./replace_file/ogage "$MOUNT_DIR/root/home/ark/.quirks/"
 
+echo "== service的调整 =="
+sudo cp -r ./replace_file/services/351mp.service "$MOUNT_DIR/root/etc/systemd/system/" 2>/dev/null || true
+sudo chmod 644 "$MOUNT_DIR/root/lib/systemd/system/mpv.service" 2>/dev/null || true
+sudo rm "$MOUNT_DIR/root/etc/systemd/system/batt_led.service" 2>/dev/null || true
+sudo rm "$MOUNT_DIR/root/etc/systemd/system/ddtbcheck.service" 2>/dev/null || true
+sudo cp -r "./replace_file/tools/Enable Quick Mode.sh" "$MOUNT_DIR/root/opt/system/Advanced/" 2>/dev/null || true
+sudo cp -r "./replace_file/tools/Enable Quick Mode.sh" "$MOUNT_DIR/root/usr/local/bin/" 2>/dev/null || true
+sudo cp -r "./replace_file/tools/Disable Quick Mode.sh" "$MOUNT_DIR/root/usr/local/bin/" 2>/dev/null || true
+
+echo "== 分支更新文件 =="
+sudo cp -r ./replace_file/arkos_update_files/emulationstation "$MOUNT_DIR/root/usr/bin/emulationstation/emulationstation"
+
 echo "== 删除不需要的文件 =="
-sudo rm -rf "$MOUNT_DIR/boot/BMPs"
-sudo rm -rf "$MOUNT_DIR/boot/ScreenFiles"
-sudo rm -rf "$MOUNT_DIR/boot/boot.ini" $MOUNT_DIR/boot/*.dtb $MOUNT_DIR/boot/*.orig $MOUNT_DIR/boot/*.tony $MOUNT_DIR/boot/Image $MOUNT_DIR/boot/*.bmp $MOUNT_DIR/boot/WHERE_ARE_MY_ROMS.txt
+sudo rm -rf "$MOUNT_DIR/boot/BMPs" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/boot/ScreenFiles" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/boot/boot.ini" $MOUNT_DIR/boot/*.dtb $MOUNT_DIR/boot/*.orig $MOUNT_DIR/boot/*.tony $MOUNT_DIR/boot/Image $MOUNT_DIR/boot/*.bmp $MOUNT_DIR/boot/WHERE_ARE_MY_ROMS.txt 2>/dev/null || true
 sudo sed -i "/title\=/c\title\=ArkOS4Clone ($UPDATE_DATE)($MODDER)" "$MOUNT_DIR/root/usr/share/plymouth/themes/text.plymouth"
+sudo rm -rf "$MOUNT_DIR/boot/DTB Change Tool.exe" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/system/DeviceType" 2>/dev/null || true
+# sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Video Boot/"
+# sudo rm -rf "$MOUNT_DIR/root/opt/system/Set Launchimage to ascii or pic.sh"
+# sudo rm -rf "$MOUNT_DIR/root/opt/system/Wifi-Toggle.sh"
+# sudo rm -rf "$MOUNT_DIR/root/opt/system/Set Launchimage to vid.sh"
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Change LED to Red.sh" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Change Ports SDL.sh" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced"/Restore*.sh 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Screen - Switch to Original Screen Timings.sh" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Reset EmulationStation Controls.sh" 2>/dev/null || true
+sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Fix Global Hotkeys.sh" 2>/dev/null || true
+
+sudo touch $MOUNT_DIR/boot/"USE_DTB_SELECT_TO_SELECT_DEVICE" 2>/dev/null || true
 cat $MOUNT_DIR/root/usr/share/plymouth/themes/text.plymouth
-sudo rm -rf "$MOUNT_DIR/root/opt/system/DeviceType"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Video Boot/"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Set Launchimage to ascii or pic.sh"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Set Launchimage to vid.sh"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Change LED to Red.sh"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Change Ports SDL.sh"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced"/Restore*.sh
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Screen - Switch to Original Screen Timings.sh"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Reset EmulationStation Controls.sh"
-sudo rm -rf "$MOUNT_DIR/root/opt/system/Advanced/Fix Global Hotkeys.sh"
-
-sudo touch $MOUNT_DIR/boot/"USE_DTB_SELECT_TO_SELECT_DEVICE"
-
 echo "== 完成 =="

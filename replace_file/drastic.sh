@@ -35,7 +35,11 @@ else
     sudo ln -sf "$target" /opt/drastic/usrcheat.dat
 fi
 
+sudo ./gptokeyb &
+
 LD_PRELOAD=./libs/libSDL2-2.0.so.0.3200.10 ./drastic "$1"
+
+sudo kill -9 $(pidof gptokeyb)
 
 sudo killall python3
 

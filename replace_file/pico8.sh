@@ -29,9 +29,9 @@ else
 fi
 if [[ -f "/boot/.console" ]]; then
   CUR_VAL="$(tr -d '\r\n' < "/boot/.console" || true)"
-  if [[ "$CUR_VAL" == "r36max" || "$CUR_VAL" == "xf40h" || "$CUR_VAL" == "xf40v" || "$CUR_VAL" == "r36ultra" || "$CUR_VAL" == "r36splus" ]]; then
+  if [[ "$CUR_VAL" == "r36max" || "$CUR_VAL" == "xf40h" || "$CUR_VAL" == "dc40v" || "$CUR_VAL" == "r36ultra" || "$CUR_VAL" == "r36splus" || "$CUR_VAL" == "t16max" || "$CUR_VAL" == "r36tmax" ]]; then
     res="720,720"
-  elif [[ "$CUR_VAL" == "r46h" ]]; then
+  elif [[ "$CUR_VAL" == "r46h" || "$CUR_VAL" == "r40xx" ]]; then
     res="1024,768"
   else
     res="640,480"

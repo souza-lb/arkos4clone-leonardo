@@ -12,44 +12,46 @@ Currently, I can only maintain the devices I personally own, but contributions a
 
 | **Brand**            | **Device**                               | **Files to Copy**                                      |
 |----------------------|------------------------------------------|--------------------------------------------------------|
+| **YMC**               | **YMC A10MINI**                        | `logo/480P/`, `kernel/common/`, `consoles/a10mini/`     |
+| **AISLPC**            | **GameConsole K36S**                    | `logo/480P/`, `kernel/common/`, `consoles/k36s/`        |
+|                      | **GameConsole R36T**                    | `logo/480P/`, `kernel/common/`, `consoles/k36s/`        |
+|                      | **GameConsole R36T MAX**                | `logo/720P/`, `kernel/common/`, `consoles/r36tmax/`     |
+| **Kinhank**           | **K36 Origin Panel**                    | `logo/480P/`, `kernel/common/`, `consoles/k36/`         |
+| **Clone R36s**        | **Clone Type 1 With Amplifier**         | `logo/480P/`, `kernel/common/`, `consoles/r36pro/` |
+|                       | **Clone Type 1 Without Amplifier**      | `logo/480P/`, `kernel/common/`, `consoles/hg36/` |
+|                      | **Clone Type 1 Without Amplifier And Invert Right Joystick** | `logo/480P/`, `kernel/common/`, `consoles/k36/` |
+|                      | **Clone Type 2 With Amplifier**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type2 amp/` |
+|                      | **Clone Type 2 Without Amplifier**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type2/` |
+|                      | **Clone Type 3**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type3/` |
+|                      | **Clone Type 4**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type4/` |
+|                      | **Clone Type 5**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type5/` |
+| **GameConsole**      | **GameConsole R46H**                    | `logo/768P/`, `kernel/common/`, `consoles/r46h/`        |
+|                      | **GameConsole R40XX**                    | `logo/768P/`, `kernel/common/`, `consoles/r40xx/`        |
+|                      | **GameConsole R36sPlus**                | `logo/720P/`, `kernel/common/`, `consoles/r36splus/`    |
+|                      | **GameConsole R36s Panel 0**            | `logo/480P/`, `kernel/common/`, `consoles/origin panel0/` |
+|                      | **GameConsole R36s Panel 1**            | `logo/480P/`, `kernel/common/`, `consoles/origin panel1/` |
+|                      | **GameConsole R36s Panel 2**            | `logo/480P/`, `kernel/common/`, `consoles/origin panel2/` |
+|                      | **GameConsole R36s Panel 3**            | `logo/480P/`, `kernel/common/`, `consoles/origin panel3/` |
+|                      | **GameConsole R36s Panel 4**            | `logo/480P/`, `kernel/common/`, `consoles/origin panel4/` |
+|                      | **GameConsole R36s Panel 4 V22**            | `logo/480P/`, `kernel/common/`, `consoles/v22 panel4/` |
+|                      | **GameConsole R36XX**                   | `logo/480P/`, `kernel/common/`, `consoles/origin panel4/` |
+|                      | **GameConsole R36H**                    | `logo/480P/`, `kernel/common/`, `consoles/r36h/` |
+|                      | **GameConsole O30S**                    | `logo/480P/`, `kernel/common/`, `consoles/r36h/` |
+| **SoySauce R36s**    | **Soy Sauce V03**                       | `logo/480P/`, `kernel/common/`, `consoles/sauce v03/`    |
+|                      | **Soy Sauce V04**                       | `logo/480P/`, `kernel/common/`, `consoles/sauce v04/`    |
 | **XiFan HandHelds**   | **XiFan Mymini**                        | `logo/480P/`, `kernel/common/`, `consoles/mymini/`      |
 |                      | **XiFan R36Max**                        | `logo/720P/`, `kernel/common/`, `consoles/r36max/`      |
 |                      | **XiFan R36Pro**                        | `logo/480P/`, `kernel/common/`, `consoles/r36pro/`      |
 |                      | **XiFan XF35H**                         | `logo/480P/`, `kernel/common/`, `consoles/xf35h/`       |
 |                      | **XiFan XF40H**                         | `logo/720P/`, `kernel/common/`, `consoles/xf40h/`       |
 |                      | **XiFan XF40V**                         | `logo/720P/`, `kernel/common/`, `consoles/dc40v/`       |
-|                      | **XiFan DC40V**                         | `logo/720P/`, `kernel/common/`, `consoles/dc40v/`       |
 |                      | **XiFan DC35V**                         | `logo/480P/`, `kernel/common/`, `consoles/dc35v/`       |
-| **GameConsole**      | **GameConsole R46H**                    | `logo/768P/`, `kernel/common/`, `consoles/r46h/`        |
-|                      | **GameConsole R36sPlus**                | `logo/720P/`, `kernel/common/`, `consoles/r36splus/`    |
-|                      | **GameConsole R36s Panel 0**            | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 0/` |
-|                      | **GameConsole R36s Panel 1**            | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 1/` |
-|                      | **GameConsole R36s Panel 2**            | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 2/` |
-|                      | **GameConsole R36s Panel 3**            | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 3/` |
-|                      | **GameConsole R36s Panel 4**            | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 4/` |
-|                      | **GameConsole R36XX**                   | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 4/` |
-|                      | **GameConsole R36H**                    | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 4/` |
-|                      | **GameConsole O30S**                    | `logo/480P/`, `kernel/common/`, `consoles/origin r36s panel 4/` |
-| **YMC**               | **YMC A10MINI**                        | `logo/480P/`, `kernel/common/`, `consoles/a10mini/`     |
-| **Kinhank**           | **K36 Origin Panel**                    | `logo/480P/`, `kernel/common/`, `consoles/k36/`         |
-| **Clone R36s**        | **Clone Type 1 With Amplifier** | `logo/480P/`, `kernel/common/`, `consoles/r36pro/` |
-|                       | **Clone Type 1 Without Amplifier** | `logo/480P/`, `kernel/common/`, `consoles/hg36/` |
-|                      | **Clone Type 1 Without Amplifier And Invert Right Joystick** | `logo/480P/`, `kernel/common/`, `consoles/K36/` |
-|                      | **Clone Type 2**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type2/` |
-|                      | **Clone Type 3**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type3/` |
-|                      | **Clone Type 4**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type4/` |
-|                      | **Clone Type 5**                         | `logo/480P/`, `kernel/common/`, `consoles/clone type5/` |
-| **SoySauce R36s**    | **Panel 5**                             | `logo/480P/`, `kernel/soySauce/`, `consoles/soy sauce r36s panel 5/` |
-|                      | **Panel 6**                            | `logo/480P/`, `kernel/soySauce/`, `consoles/soy sauce r36s panel 6/` |
-|                      | **Soy Sauce V04**                       | `logo/480P/`, `kernel/common/`, `consoles/soy sauce v04/` |
-| **Other**             | **GameConsole K36S**                    | `logo/480P/`, `kernel/common/`, `consoles/k36s/`        |
-|                      | **GameConsole R36T**                    | `logo/480P/`, `kernel/common/`, `consoles/k36s/`        |
-|                      | **GameConsole R36T MAX**                | `logo/720P/`, `kernel/common/`, `consoles/r36tmax/`     |
-|                      | **GameConsole HG36**                    | `logo/480P/`, `kernel/common/`, `consoles/hg36/`        |
+|                      | **XiFan DC40V**                         | `logo/720P/`, `kernel/common/`, `consoles/dc40v/`       |
+|**Other**             | **GameConsole HG36**                    | `logo/480P/`, `kernel/common/`, `consoles/hg36/`        |
 |                      | **GameConsole R36Ultra**                | `logo/720P/`, `kernel/common/`, `consoles/r36ultra/`    |
 |                      | **GameConsole RX6H**                    | `logo/480P/`, `kernel/common/`, `consoles/rx6h/`        |
 |                       | **GameConsole XGB36**                   | `logo/480P/`, `kernel/common/`, `consoles/xgb36/`       |
-|                      | **GameConsole T16MAX**                  | `logo/480P/`, `kernel/common/`, `consoles/t16max/`      |
+|                      | **GameConsole T16MAX**                  | `logo/720P/`, `kernel/common/`, `consoles/t16max/`      |
 
 ---
 
@@ -99,3 +101,12 @@ with custom controller axis mappings.
 
 I can only test and maintain devices I physically own.  
 If you have other clone devices and want to help improve compatibility, feel free to submit a **PR**!
+
+# ❤️ **Support the Project**
+
+If you find ArkOS4Clone helpful and want to support future development:\
+👉 **https://ko-fi.com/lcdyk**
+
+Every donation helps testing new devices, improving compatibility, and
+speeding up development.\
+Thank you for your support! 🙏
