@@ -400,6 +400,14 @@ else
 fi
 
 # 简体中文首启配置
+if [[ -f "/boot/.br" ]]; then
+  if grep -q "Language" /home/ark/.emulationstation/es_settings.cfg; then
+    sed -i -e '/<string name\=\"Language/c\<string name\=\"Language\" value\=\"br\" \/>' /home/ark/.emulationstation/es_settings.cfg || true
+  else
+    sed -i '$a <string name\=\"Language\" value\=\"br\" \/>' /home/ark/.emulationstation/es_settings.cfg || true
+  fi
+fi
+
 if [[ -f "/boot/.cn" ]]; then
   if grep -q "Language" /home/ark/.emulationstation/es_settings.cfg; then
     sed -i -e '/<string name\=\"Language/c\<string name\=\"Language\" value\=\"zh-CN\" \/>' /home/ark/.emulationstation/es_settings.cfg || true
